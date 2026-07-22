@@ -11,7 +11,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
     session_destroy();
     header("Location: ../auth/login.php");
     exit;
+    
 }
+$search = $_GET['search'] ?? '';
 
 // Database configuration
 $host     = 'localhost';
@@ -37,10 +39,38 @@ try {
     }
 
     // 3. FETCH ALL SUBMISSIONS
-    $sql = "SELECT * FROM form_submissions ORDER BY id_key DESC";
+   $search = trim($_GET['search'] ?? '');
+
+if (!empty($search)) {
+
+    $sql = "SELECT *
+            FROM form_submissions
+            WHERE other_name LIKE :search
+               OR surname LIKE :search
+               OR nationality LIKE :search
+               OR occupation LIKE :search
+               OR national_id LIKE :search
+            ORDER BY id_key DESC";
+
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $keyword = "%{$search}%";
+
+    $stmt->bindParam(':search', $keyword);
+
+} else {
+
+    $sql = "SELECT *
+            FROM form_submissions
+            ORDER BY id_key DESC";
+
+    $stmt = $conn->prepare($sql);
+}
+
+$stmt->execute();
+
+$submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
 
 } catch (PDOException $e) {
     die("Database view error: " . $e->getMessage());
@@ -66,10 +96,43 @@ try {
 </head>
 <body>
 
-    <div class="header-bar">
-        <h2>Registered Submissions Dashboard</h2>
-        <a href="view.php?action=logout" class="btn btn-logout">Logout</a>
-    </div>
+   <div class="header-bar">
+    <h2>Registered Submissions Dashboard</h2>
+    <a href="view.php?action=logout" class="btn btn-logout">Logout</a>
+</div>
+
+<!-- Search Form -->
+<form method="GET" action="" style="margin:20px 0; display:flex; gap:10px; align-items:center;">
+
+    <input
+        type="text"
+        name="search"
+        value="<?php echo htmlspecialchars($search); ?>"
+        placeholder="Search by Name, Occupation, Nationality..."
+        style="padding:10px; width:350px; border:1px solid #ccc; border-radius:5px;">
+
+    <button
+        type="submit"
+        style="padding:10px 15px; background:#0d6efd; color:white; border:none; border-radius:5px;">
+        🔍 Search
+    </button>
+
+    <a href="view.php">Clear</a>
+
+</form>
+<form method="GET" action="" style="margin:20px 0;">
+
+    <input
+        type="text"
+        name="search"
+        value="<?php echo htmlspecialchars($search); ?>"
+        placeholder="Search..."
+    >
+
+    <button type="submit">Search</button>
+
+</form>
+<table>
 
     <table>
         <thead>
