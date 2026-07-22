@@ -1,182 +1,109 @@
-:root{
-
-    --primary:#0F172A;
-
-    --secondary:#FACC15;
-
-    --success:#16A34A;
-
-    --dark:#111827;
-
-    --light:#F8FAFC;
-
-    --white:#FFFFFF;
-
-}
+/* ================================
+   RMS Theme
+================================ */
 
 *{
-
     margin:0;
-
     padding:0;
-
     box-sizing:border-box;
-
 }
 
 body{
-
-    background:var(--light);
-
-    font-family:'Poppins',sans-serif;
-
-    color:var(--dark);
-
+    font-family:Segoe UI, Arial, sans-serif;
+    background:#F4F6F9;
+    color:#212529;
+    padding:30px;
 }
 
-a{
+/* Header */
 
-    text-decoration:none;
-
-}
-
-ul{
-
-    list-style:none;
-
-}
-/*==========================
-SIDEBAR
-==========================*/
-
-.sidebar{
-
-    position:fixed;
-
-    width:260px;
-
-    height:100vh;
-
-    background:var(--primary);
-
+.header-bar{
+    background:#0B1F3A;
     color:white;
-
-    left:0;
-
-    top:0;
-
-    padding:25px;
-
-}
-
-.logo{
-
-    text-align:center;
-
-    margin-bottom:40px;
-
-}
-
-.logo i{
-
-    font-size:55px;
-
-    color:var(--secondary);
-
-}
-
-.logo h2{
-
-    margin-top:15px;
-
-    font-weight:700;
-
-}
-
-.logo p{
-
-    color:#d1d5db;
-
-    font-size:14px;
-
-}
-
-.menu{
-
-    margin-top:20px;
-
-}
-
-.menu li{
-
-    margin:12px 0;
-
-}
-
-.menu a{
-
-    display:flex;
-
-    align-items:center;
-
-    color:white;
-
-    padding:14px;
-
+    padding:20px;
     border-radius:10px;
-
-    transition:.3s;
-
-    font-weight:500;
-
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
 }
 
-.menu a i{
-
-    width:30px;
-
-    color:var(--secondary);
-
+.header-bar h2{
+    margin:0;
 }
 
-.menu a:hover{
+/* Buttons */
 
-    background:var(--success);
-
+.btn{
+    padding:10px 16px;
+    border-radius:6px;
+    text-decoration:none;
     color:white;
-
-    transform:translateX(6px);
-
+    font-weight:bold;
 }
 
-.active a{
-
-    background:var(--success);
-
+.btn-edit{
+    background:#FFC107;
+    color:black;
 }
 
-.profile{
-
-    position:absolute;
-
-    bottom:30px;
-
-    left:25px;
-
-    right:25px;
-
-    text-align:center;
-
+.btn-delete{
+    background:#DC3545;
 }
 
-.profile i{
-
-    color:var(--secondary);
-
+.btn-logout{
+    background:#198754;
 }
 
-.profile h5{
+/* Search Box */
 
-    margin-top:10px;
+.search-box{
+    margin-bottom:20px;
+}
 
+.search-box input{
+    width:350px;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.search-box button{
+    padding:10px 15px;
+    border:none;
+    background:#0B1F3A;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.search-box button:hover{
+    background:#16345d;
+}
+
+/* Table */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+th{
+    background:#0B1F3A;
+    color:white;
+}
+
+th,
+td{
+    padding:14px;
+    border-bottom:1px solid #eee;
+}
+
+tbody tr:hover{
+    background:#FFF8DC;
+    transition:.2s;
 }

@@ -2,14 +2,14 @@
 session_start();
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: ../auth/login.php");
-    exit;
+   header("Location: view.php");
+exit;
 }
 
 // Handle Logout
 if (isset($_GET['action']) && $_GET['action'] == 'logout') {
     session_destroy();
-    header("Location: ../auth/login.php");
+    header("Location: view.php");
     exit;
     
 }
@@ -34,7 +34,7 @@ try {
         $del_stmt->execute();
         
         // Refresh page to show updated table
-        header("Location: ../auth/login.php");
+        header("Location: view.php");
         exit;
     }
 
@@ -81,28 +81,17 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html>
 <head>
     <title>Form Submissions Dashboard</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f9f9f9; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #333; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-        .btn { padding: 6px 12px; text-decoration: none; border-radius: 4px; color: white; font-size: 14px; }
-        .btn-edit { background: #FFA500; margin-right: 5px; }
-        .btn-delete { background: #f44336; }
-        .btn-logout { background: #555; padding: 10px 15px; }
-    </style>
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-
+<h1 style="color:red;">TEST PAGE</h1>
    <div class="header-bar">
     <h2>Registered Submissions Dashboard</h2>
     <a href="view.php?action=logout" class="btn btn-logout">Logout</a>
 </div>
 
 <!-- Search Form -->
-<form method="GET" action="" style="margin:20px 0; display:flex; gap:10px; align-items:center;">
+<form method="GET" class="search-box">
 
     <input
         type="text"
@@ -120,19 +109,10 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a href="view.php">Clear</a>
 
 </form>
-<form method="GET" action="" style="margin:20px 0;">
 
-    <input
-        type="text"
-        name="search"
-        value="<?php echo htmlspecialchars($search); ?>"
-        placeholder="Search..."
-    >
 
-    <button type="submit">Search</button>
 
-</form>
-<table>
+
 
     <table>
         <thead>
