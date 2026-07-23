@@ -309,3 +309,14 @@ Dashboard Header
     background:#198754;
 
 }
+.btn{
+
+    background:#0B1F3A;
+
+}
+
+.btn:hover{
+
+    opacity:.9;
+
+}

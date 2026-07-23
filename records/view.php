@@ -138,10 +138,23 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($row['nationality']); ?></td>
                         <td><?php echo htmlspecialchars($row['submitted_at']); ?></td>
                         <td>
-                            <!-- Link to edit file passing ID -->
-                            <a href="edit.php?id=<?php echo $row['id_key']; ?>" class="btn btn-edit"><i class="fas fa-pen"></i> Edit</a>
-                            <!-- Link to delete action passing ID with javascript confirmation check -->
-                            <a href="view.php?action=delete&id=<?php echo $row['id_key']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this record?');"><i class="fas fa-trash"></i> Delete</a>
+                          <td>
+
+<a href="view_record.php?id=<?= $row['id_key'] ?>" class="btn">
+    <i class="fas fa-eye"></i> View
+</a>
+
+<a href="edit.php?id=<?= $row['id_key'] ?>" class="btn btn-edit">
+    <i class="fas fa-pen"></i> Edit
+</a>
+
+<a href="delete.php?id=<?= $row['id_key'] ?>"
+class="btn btn-delete"
+onclick="return confirm('Delete this record?')">
+    <i class="fas fa-trash"></i> Delete
+</a>
+
+</td>
                         </td>
                     </tr>
                 <?php endforeach; ?>
