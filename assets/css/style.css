@@ -44,7 +44,7 @@ body{
 
 .btn-edit{
     background:#FFC107;
-    color:black;
+    color:#fff;
 }
 
 .btn-delete{
@@ -319,4 +319,58 @@ Dashboard Header
 
     opacity:.9;
 
+}
+.actions{
+    white-space: nowrap;
+}
+
+.actions .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-right:6px;
+    padding:8px 14px;
+    border-radius:6px;
+}
+/* ===================================
+   Action Buttons
+=================================== */
+
+.action-buttons{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:nowrap;
+}
+
+.action-buttons a{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:8px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+}
+
+/* View */
+
+.btn-view{
+    background:#0d6efd;
+}
+
+/* Edit */
+
+.btn-edit{
+    background:#ffc107;
+    color:#000;
+}
+
+/* Delete */
+
+.btn-delete{
+    background:#dc3545;
 }

@@ -92,28 +92,27 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <!-- Search Form -->
-<form method="GET" class="search-box">
+<div class="search-box">
 
-    <input
-        type="text"
-        name="search"
-        value="<?php echo htmlspecialchars($search); ?>"
-        placeholder="Search by Name, Occupation, Nationality..."
-        style="padding:10px; width:350px; border:1px solid #ccc; border-radius:5px;">
+    <form method="GET">
 
-    <button
-        type="submit"
-        style="padding:10px 15px; background:#0d6efd; color:white; border:none; border-radius:5px;">
-        <i class="fas fa-search"></i> Search
-    </button>
+        <input type="text" name="search">
 
-    <a href="view.php">❌ Clear</a>
+        <button type="submit">
+            <i class="fas fa-search"></i>
+            Search
+        </button>
 
-</form>
-<a href="export_pdf.php" class="btn">
-    <i class="fas fa-file-pdf"></i>
-    Export PDF
-</a>
+        <a href="view.php">Clear</a>
+
+        <a href="export_pdf.php" class="btn">
+            <i class="fas fa-file-pdf"></i>
+            Export PDF
+        </a>
+
+    </form>
+
+</div>
     <table>
         <thead>
             <tr>
@@ -140,25 +139,29 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($row['occupation']); ?></td>
                         <td><?php echo htmlspecialchars($row['nationality']); ?></td>
                         <td><?php echo htmlspecialchars($row['submitted_at']); ?></td>
-                        <td>
+                        
                           <td>
 
-<a href="view_record.php?id=<?= $row['id_key'] ?>" class="btn">
-    <i class="fas fa-eye"></i> View
+<div class="action-buttons">
+
+<a href="details.php?id=<?= $row['id_key']; ?>" class="btn-view">
+<i class="fas fa-eye"></i> View
 </a>
 
-<a href="edit.php?id=<?= $row['id_key'] ?>" class="btn btn-edit">
-    <i class="fas fa-pen"></i> Edit
+<a href="edit.php?id=<?= $row['id_key']; ?>" class="btn-edit">
+<i class="fas fa-pen"></i> Edit
 </a>
 
-<a href="delete.php?id=<?= $row['id_key'] ?>"
-class="btn btn-delete"
-onclick="return confirm('Delete this record?')">
-    <i class="fas fa-trash"></i> Delete
+<a href="delete.php?id=<?= $row['id_key']; ?>"
+class="btn-delete"
+onclick="return confirm('Delete this record?');">
+<i class="fas fa-trash"></i> Delete
 </a>
+
+</div>
 
 </td>
-                        </td>
+                        
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
