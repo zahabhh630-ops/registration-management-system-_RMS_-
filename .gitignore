@@ -3,3 +3,10 @@
 
 # Ignore log files
 *.log
+
+# Composer dependencies
+/vendor/
+
+# OS files
+Thumbs.db
+.DS_Store
