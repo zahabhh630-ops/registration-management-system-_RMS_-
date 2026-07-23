@@ -48,7 +48,11 @@ $stmt = $conn->query("
 
 $latest = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+<?php include "../includes/header.php"; ?>
 
+<?php include "../includes/sidebar.php"; ?>
+
+<div style="margin-left:270px; padding:30px;">
 <!DOCTYPE html>
 <html>
 <head>
@@ -152,5 +156,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </table>
 </div>
 </div>
+</div>
+
+<?php include "../includes/footer.php"; ?>
 </body>
 </html>

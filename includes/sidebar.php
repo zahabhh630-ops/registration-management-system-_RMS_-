@@ -1,76 +1,35 @@
 <div class="sidebar">
 
-    <div class="logo">
+    <h2>RMS</h2>
 
-        <i class="fa-solid fa-database"></i>
+    <a href="../dashboard/index.php">
+        <i class="fas fa-home"></i>
+        Dashboard
+    </a>
 
-        <h2>RMS</h2>
+    <a href="../records/view.php">
+        <i class="fas fa-users"></i>
+        Records
+    </a>
 
-        <p>Registration Management System</p>
+    <a href="../records/add.php">
+        <i class="fas fa-user-plus"></i>
+        Add Record
+    </a>
 
-    </div>
+    <a href="#">
+        <i class="fas fa-chart-bar"></i>
+        Reports
+    </a>
 
-    <ul class="menu">
+    <a href="#">
+        <i class="fas fa-cog"></i>
+        Settings
+    </a>
 
-        <li class="active">
-            <a href="#">
-                <i class="fa-solid fa-house"></i>
-                Dashboard
-            </a>
-        </li>
-
-        <li>
-            <a href="#">
-                <i class="fa-solid fa-users"></i>
-                Registrations
-            </a>
-        </li>
-
-        <li>
-            <a href="#">
-                <i class="fa-solid fa-user-plus"></i>
-                Add Registration
-            </a>
-        </li>
-
-        <li>
-            <a href="#">
-                <i class="fa-solid fa-chart-column"></i>
-                Reports
-            </a>
-        </li>
-
-        <li>
-            <a href="#">
-                <i class="fa-solid fa-chart-line"></i>
-                Analytics
-            </a>
-        </li>
-
-        <li>
-            <a href="#">
-                <i class="fa-solid fa-gear"></i>
-                Settings
-            </a>
-        </li>
-
-        <li>
-            <a href="../records/view.php?action=logout">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
-            </a>
-        </li>
-
-    </ul>
-
-    <div class="profile">
-
-        <i class="fa-solid fa-circle-user fa-2x"></i>
-
-        <h5>Administrator</h5>
-
-        <small>System Administrator</small>
-
-    </div>
+    <a href="../auth/logout.php">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </a>
 
 </div>
