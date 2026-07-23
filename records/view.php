@@ -13,7 +13,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
     exit;
     
 }
-$search = $_GET['search'] ?? '';
+
 
 // Database configuration
 $host     = 'localhost';
@@ -82,12 +82,13 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <title>Form Submissions Dashboard</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-<h1 style="color:red;">TEST PAGE</h1>
+
    <div class="header-bar">
-    <h2>Registered Submissions Dashboard</h2>
-    <a href="view.php?action=logout" class="btn btn-logout">Logout</a>
+    <h2><i class="fas fa-users"></i> Registered Submissions Dashboard</h2>
+    <a href="view.php?action=logout" class="btn btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
 
 <!-- Search Form -->
@@ -103,16 +104,12 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button
         type="submit"
         style="padding:10px 15px; background:#0d6efd; color:white; border:none; border-radius:5px;">
-        🔍 Search
+        <i class="fas fa-search"></i> Search
     </button>
 
-    <a href="view.php">Clear</a>
+    <a href="view.php">❌ Clear</a>
 
 </form>
-
-
-
-
 
     <table>
         <thead>
@@ -142,9 +139,9 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($row['submitted_at']); ?></td>
                         <td>
                             <!-- Link to edit file passing ID -->
-                            <a href="edit.php?id=<?php echo $row['id_key']; ?>" class="btn btn-edit">Edit</a>
+                            <a href="edit.php?id=<?php echo $row['id_key']; ?>" class="btn btn-edit"><i class="fas fa-pen"></i> Edit</a>
                             <!-- Link to delete action passing ID with javascript confirmation check -->
-                            <a href="view.php?action=delete&id=<?php echo $row['id_key']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                            <a href="view.php?action=delete&id=<?php echo $row['id_key']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this record?');"><i class="fas fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
