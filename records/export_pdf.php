@@ -110,10 +110,7 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a href="view.php">❌ Clear</a>
 
 </form>
-<a href="export_pdf.php" class="btn">
-    <i class="fas fa-file-pdf"></i>
-    Export PDF
-</a>
+
     <table>
         <thead>
             <tr>
