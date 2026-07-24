@@ -2,34 +2,62 @@
 
     <h2>RMS</h2>
 
-    <a href="../dashboard/index.php">
-        <i class="fas fa-home"></i>
-        Dashboard
-    </a>
+    <ul>
 
-    <a href="../records/view.php">
-        <i class="fas fa-users"></i>
-        Records
-    </a>
+        <li>
+            <a href="../dashboard/index.php">
+                <i class="fas fa-chart-line"></i>
+                Dashboard
+            </a>
+        </li>
 
-    <a href="../records/add.php">
-        <i class="fas fa-user-plus"></i>
-        Add Record
-    </a>
+        <li>
+            <a href="../records/view.php">
+                <i class="fas fa-users"></i>
+                Registrations
+            </a>
+        </li>
 
-    <a href="#">
-        <i class="fas fa-chart-bar"></i>
-        Reports
-    </a>
+        <li>
+            <a href="../reports/report.php">
+                <i class="fas fa-file-alt"></i>
+                Reports
+            </a>
+        </li>
 
-    <a href="#">
-        <i class="fas fa-cog"></i>
-        Settings
-    </a>
+        <li>
+            <a href="../records/export_pdf.php">
+                <i class="fas fa-file-pdf"></i>
+                Export PDF
+            </a>
+        </li>
 
-    <a href="../auth/logout.php">
-        <i class="fas fa-right-from-bracket"></i>
-        Logout
+        <li>
+            <a href="#">
+                <i class="fas fa-file-excel"></i>
+                Export Excel
+            </a>
+        </li>
+<li>
+    <a href="../users/index.php">
+        <i class="fas fa-users-cog"></i>
+        Users
     </a>
+</li>
+        <li>
+            <a href="#">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+        </li>
+
+        <li>
+            <a href="../auth/logout.php">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </li>
+
+    </ul>
 
 </div>

@@ -85,7 +85,9 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
+<?php include "../includes/sidebar.php"; ?>
 
+<div class="main-content">
    <div class="header-bar">
     <h2><i class="fas fa-users"></i> Registered Submissions Dashboard</h2>
     <a href="view.php?action=logout" class="btn btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -171,6 +173,6 @@ onclick="return confirm('Delete this record?');">
             <?php endif; ?>
         </tbody>
     </table>
-
+</div>
 </body>
 </html>

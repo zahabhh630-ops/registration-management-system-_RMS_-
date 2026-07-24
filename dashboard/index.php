@@ -1,12 +1,8 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['admin_logged_in'])) {
-    header("Location: ../auth/login.php");
-    exit;
-}
-
+require_once "../includes/auth_check.php";
 require_once "../config/database.php";
+
 // =============================
 // Dashboard Statistics
 // =============================
@@ -65,12 +61,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </head>
 
 <body>
+<?php include "../includes/sidebar.php"; ?>
 
+<div class="main-content">
 <div class="dashboard-header">
 
     <div>
         <h1>Registration Management System</h1>
-        <p>Welcome back, Administrator</p>
+        <p>Welcome back,
+<?= htmlspecialchars($_SESSION['fullname']) ?></p>
     </div>
 
    <div class="header-right">
@@ -157,7 +156,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </div>
 </div>
 </div>
-
+</div>
+</div></div>
 <?php include "../includes/footer.php"; ?>
 </body>
 </html>
