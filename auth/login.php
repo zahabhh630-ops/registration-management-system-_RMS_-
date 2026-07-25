@@ -3,19 +3,20 @@ session_start();
 
 require_once "../config/database.php";
 require_once "../config/app.php";
+require_once "../includes/logger.php";
 
 $error = "";
 
 if (isset($_POST['login'])) {
 
     $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $password = $_POST['password'];
 
+    // Find user by username
     $stmt = $conn->prepare("
         SELECT *
         FROM users
         WHERE username = ?
-        AND status = 'Active'
         LIMIT 1
     ");
 
@@ -25,46 +26,43 @@ if (isset($_POST['login'])) {
 
     if ($user) {
 
-    // Check if account is active
-    if ($user['status'] !== 'Active') {
+        // Verify password first
+        if (!password_verify($password, $user['password'])) {
 
-        $error = "Your account has been deactivated. Please contact the administrator.";
+            $error = "Invalid username or password.";
 
-    }
+        }
+        // Check if account is active
+        elseif ($user['status'] !== 'Active') {
 
-    // Verify password
-    elseif (password_verify($password, $user['password'])) {
+            $error = "Your account has been deactivated. Please contact the administrator.";
 
-        $_SESSION['logged_in'] = true;
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['fullname'] = $user['fullname'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
+        }
+        // Successful login
+        else {
 
-        header("Location: ../dashboard/index.php");
-        exit;
+            $_SESSION['logged_in'] = true;
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['fullname'] = $user['fullname'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
 
-    }
+            // Audit Log
+            logActivity(
+                $conn,
+                "Logged into the system"
+            );
 
-    else {
-
-        $error = "Invalid username or password.";
-
-    }
-
-} else {
-
-    $error = "Invalid username or password.";
-
-}
+            header("Location: ../dashboard/index.php");
+            exit;
+        }
 
     } else {
 
         $error = "Invalid username or password.";
 
     }
-
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -72,82 +70,66 @@ if (isset($_POST['login'])) {
 
 <head>
 
-<title>Admin Login</title>
+    <title>Administrator Login</title>
 
-<style>
+    <style>
 
-body{
-    font-family:Arial;
-    background:#f4f4f4;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
 
-.login-box{
+        .login-box{
 
-    width:350px;
+            width:350px;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 5px 15px rgba(0,0,0,.15);
 
-    background:white;
+        }
 
-    padding:30px;
+        input{
 
-    border-radius:10px;
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            border:1px solid #ddd;
+            border-radius:6px;
+            box-sizing:border-box;
 
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
+        }
 
-}
+        button{
 
-input{
+            width:100%;
+            padding:12px;
+            background:#0B1F3A;
+            color:white;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
 
-    width:100%;
+        }
 
-    padding:12px;
+        button:hover{
 
-    margin:10px 0;
+            background:#16345d;
 
-    border:1px solid #ddd;
+        }
 
-    border-radius:6px;
+        .error{
 
-    box-sizing:border-box;
+            color:red;
+            margin-bottom:15px;
 
-}
+        }
 
-button{
-
-    width:100%;
-
-    padding:12px;
-
-    background:#0B1F3A;
-
-    color:white;
-
-    border:none;
-
-    border-radius:6px;
-
-    cursor:pointer;
-
-}
-
-button:hover{
-
-    background:#16345d;
-
-}
-
-.error{
-
-    color:red;
-
-    margin-bottom:15px;
-
-}
-
-</style>
+    </style>
 
 </head>
 
@@ -155,37 +137,37 @@ button:hover{
 
 <div class="login-box">
 
-<h2>Administrator Login</h2>
+    <h2>Administrator Login</h2>
 
-<?php if($error): ?>
+    <?php if ($error): ?>
 
-<p class="error"><?= htmlspecialchars($error) ?></p>
+        <p class="error"><?= htmlspecialchars($error); ?></p>
 
-<?php endif; ?>
+    <?php endif; ?>
 
-<form method="post">
+    <form method="post">
 
-<input
-type="text"
-name="username"
-placeholder="Username"
-required>
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required>
 
-<input
-type="password"
-name="password"
-placeholder="Password"
-required>
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required>
 
-<button
-type="submit"
-name="login">
+        <button
+            type="submit"
+            name="login">
 
-Login
+            Login
 
-</button>
+        </button>
 
-</form>
+    </form>
 
 </div>
 
