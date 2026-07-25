@@ -3,6 +3,7 @@
 require_once "../includes/auth_check.php";
 require_once "../config/database.php";
 
+
 // =============================
 // Dashboard Statistics
 // =============================
@@ -61,6 +62,19 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </head>
 
 <body>
+    <?php if (isset($_SESSION['error'])): ?>
+
+<div class="alert alert-danger alert-dismissible fade show">
+
+    <?= htmlspecialchars($_SESSION['error']); ?>
+
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+
+</div>
+
+<?php unset($_SESSION['error']); ?>
+
+<?php endif; ?>
 <?php include "../includes/sidebar.php"; ?>
 
 <div class="main-content">

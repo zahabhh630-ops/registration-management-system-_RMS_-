@@ -38,12 +38,15 @@
                 Export Excel
             </a>
         </li>
+<?php if ($_SESSION['role'] === "Admin"): ?>
+
 <li>
     <a href="../users/index.php">
-        <i class="fas fa-users-cog"></i>
-        Users
+        User Management
     </a>
 </li>
+
+<?php endif; ?>
         <li>
             <a href="#">
                 <i class="fas fa-cog"></i>

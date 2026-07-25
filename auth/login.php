@@ -23,7 +23,17 @@ if (isset($_POST['login'])) {
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password'])) {
+    if ($user) {
+
+    // Check if account is active
+    if ($user['status'] !== 'Active') {
+
+        $error = "Your account has been deactivated. Please contact the administrator.";
+
+    }
+
+    // Verify password
+    elseif (password_verify($password, $user['password'])) {
 
         $_SESSION['logged_in'] = true;
         $_SESSION['user_id'] = $user['id'];
@@ -31,8 +41,22 @@ if (isset($_POST['login'])) {
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
 
-        header("Location: " . BASE_URL . "/dashboard/index.php");
+        header("Location: ../dashboard/index.php");
         exit;
+
+    }
+
+    else {
+
+        $error = "Invalid username or password.";
+
+    }
+
+} else {
+
+    $error = "Invalid username or password.";
+
+}
 
     } else {
 
@@ -40,7 +64,7 @@ if (isset($_POST['login'])) {
 
     }
 
-}
+
 ?>
 
 <!DOCTYPE html>
