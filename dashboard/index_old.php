@@ -1,0 +1,205 @@
+<?php
+
+require_once "../includes/auth_check.php";
+require_once "../config/database.php";
+
+// Total Users
+$totalUsers = $conn->query("
+    SELECT COUNT(*) FROM users
+")->fetchColumn();
+
+// Active Users
+$activeUsers = $conn->query("
+    SELECT COUNT(*) FROM users
+    WHERE status='Active'
+")->fetchColumn();
+
+// Inactive Users
+$inactiveUsers = $conn->query("
+    SELECT COUNT(*) FROM users
+    WHERE status='Inactive'
+")->fetchColumn();
+
+// Total Records
+$totalRecords = $conn->query("
+    SELECT COUNT(*) FROM form_submissions
+")->fetchColumn();
+
+// Today's Records
+$todayRecords = $conn->query("
+    SELECT COUNT(*)
+    FROM form_submissions
+    WHERE DATE(submitted_at)=CURDATE()
+")->fetchColumn();
+
+// =============================
+// Dashboard Statistics
+// =============================
+
+// Total Records
+$totalRecords = $conn->query("
+SELECT COUNT(*)
+FROM form_submissions
+")->fetchColumn();
+
+// Today's Records
+$todayRecords = $conn->query("
+SELECT COUNT(*)
+FROM form_submissions
+WHERE DATE(submitted_at)=CURDATE()
+")->fetchColumn();
+
+// Nationalities
+$totalNationalities = $conn->query("
+SELECT COUNT(DISTINCT nationality)
+FROM form_submissions
+WHERE nationality <> ''
+")->fetchColumn();
+
+// Occupations
+$totalOccupations = $conn->query("
+SELECT COUNT(DISTINCT occupation)
+FROM form_submissions
+WHERE occupation <> ''
+")->fetchColumn();
+
+// Latest 5 registrations
+$stmt = $conn->query("
+    SELECT *
+    FROM form_submissions
+    ORDER BY submitted_at DESC
+    LIMIT 5
+");
+
+$latest = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+<?php include "../includes/header.php"; ?>
+
+<?php include "../includes/sidebar.php"; ?>
+
+<div style="margin-left:270px; padding:30px;">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+   <link rel="stylesheet" href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+    <?php if (isset($_SESSION['error'])): ?>
+
+<div class="alert alert-danger alert-dismissible fade show">
+
+    <?= htmlspecialchars($_SESSION['error']); ?>
+
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+
+</div>
+
+<?php unset($_SESSION['error']); ?>
+
+<?php endif; ?>
+<?php include "../includes/sidebar.php"; ?>
+
+<div class="main-content">
+<div class="dashboard-header">
+
+    <div>
+        <h1>Registration Management System</h1>
+        <p>Welcome back,
+<?= htmlspecialchars($_SESSION['fullname']) ?></p>
+    </div>
+
+   <div class="header-right">
+
+    <div class="header-info">
+        <i class="fa-solid fa-calendar-days"></i>
+        <?= date("d M Y") ?>
+    </div>
+
+    <a href="../auth/logout.php" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+    </a>
+
+</div>
+
+</div>
+
+
+<div class="dashboard-cards">
+
+    <div class="card">
+        <i class="fas fa-users"></i>
+        <h2><?= $totalRecords ?></h2>
+        <p>Total Records</p>
+    </div>
+
+    <div class="card">
+        <i class="fas fa-calendar-day"></i>
+        <h2><?= $todayRecords ?></h2>
+        <p>Today's Records</p>
+    </div>
+
+    <div class="card">
+        <i class="fas fa-globe-africa"></i>
+        <h2><?= $totalNationalities ?></h2>
+        <p>Nationalities</p>
+    </div>
+
+    <div class="card">
+        <i class="fas fa-briefcase"></i>
+        <h2><?= $totalOccupations ?></h2>
+        <p>Occupations</p>
+    </div>
+
+</div>
+<div>
+<div class="table-section">
+
+    <h2>Latest Registrations</h2>
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Other Name</th>
+<th>Surname</th>
+<th>Nationality</th>
+<th>Date</th>
+</tr>
+</thead>
+
+<tbody>
+<?php foreach($latest as $row): ?>
+</tbody>
+<tr>
+
+<td><?= $row['id_key'] ?></td>
+
+<td><?= htmlspecialchars($row['other_name']) ?></td>
+
+<td><?= htmlspecialchars($row['surname']) ?></td>
+
+<td><?= htmlspecialchars($row['nationality']) ?></td>
+
+<td><?= $row['submitted_at'] ?></td>
+
+</tr>
+
+<?php endforeach; ?>
+
+</table>
+</div>
+</div>
+</div>
+</div>
+</div></div>
+<?php include "../includes/footer.php"; ?>
+</body>
+</html>

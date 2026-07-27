@@ -1,29 +1,7 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-   header("Location: view.php");
-exit;
-}
-
-// Handle Logout
-if (isset($_GET['action']) && $_GET['action'] == 'logout') {
-    session_destroy();
-    header("Location: view.php");
-    exit;
-    
-}
-
-
-// Database configuration
-$host     = 'localhost';
-$db_name  = 'form_db';
-$username = 'root';
-$password = '';
-
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8mb4", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+require_once "../includes/auth_check.php";
+require_once "../config/database.php";
 
     // 2. HANDLE DELETE ACTION
     if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
@@ -37,50 +15,89 @@ try {
         header("Location: view.php");
         exit;
     }
+// Pagination starts here...
+$limit = 2;
+ 
 
-    // 3. FETCH ALL SUBMISSIONS
-   $search = trim($_GET['search'] ?? '');
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+if ($page < 1) {
+    $page = 1;
+}
+
+$offset = ($page - 1) * $limit;
+
+$search = trim($_GET['search'] ?? '');
 
 if (!empty($search)) {
 
-    $sql = "SELECT *
-            FROM form_submissions
-            WHERE other_name LIKE :search
-               OR surname LIKE :search
-               OR nationality LIKE :search
-               OR occupation LIKE :search
-               OR national_id LIKE :search
-            ORDER BY id_key DESC";
-
-    $stmt = $conn->prepare($sql);
+    $countStmt = $conn->prepare("
+        SELECT COUNT(*)
+        FROM form_submissions
+        WHERE other_name LIKE :search
+           OR surname LIKE :search
+           OR nationality LIKE :search
+           OR occupation LIKE :search
+           OR national_id LIKE :search
+    ");
 
     $keyword = "%{$search}%";
 
+    $countStmt->bindParam(':search', $keyword);
+    $countStmt->execute();
+
+    $totalRecords = $countStmt->fetchColumn();
+
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM form_submissions
+        WHERE other_name LIKE :search
+           OR surname LIKE :search
+           OR nationality LIKE :search
+           OR occupation LIKE :search
+           OR national_id LIKE :search
+        ORDER BY id_key DESC
+        LIMIT :limit OFFSET :offset
+    ");
+
     $stmt->bindParam(':search', $keyword);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
-} else {
+}
+else {
 
-    $sql = "SELECT *
-            FROM form_submissions
-            ORDER BY id_key DESC";
+    $totalRecords = $conn->query("
+        SELECT COUNT(*)
+        FROM form_submissions
+    ")->fetchColumn();
 
-    $stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM form_submissions
+        ORDER BY id_key DESC
+        LIMIT :limit OFFSET :offset
+    ");
+
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
 }
 
 $stmt->execute();
 
 $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$totalPages = ceil($totalRecords / $limit);
     
 
-} catch (PDOException $e) {
-    die("Database view error: " . $e->getMessage());
-}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Form Submissions Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
@@ -98,7 +115,11 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <form method="GET">
 
-        <input type="text" name="search">
+        <input typetype="text"
+    name="search"
+    class="form-control"
+    placeholder="Search by name, nationality, occupation..."
+    value="<?= htmlspecialchars($search) ?>">
 
         <button type="submit">
             <i class="fas fa-search"></i>
@@ -111,10 +132,48 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <i class="fas fa-file-pdf"></i>
             Export PDF
         </a>
+        <a href="add.php" class="btn btn-success">
+    <i class="fas fa-plus"></i> Add Registration
+</a>
+<a href="export_excel.php" class="btn btn-success">
+    <i class="fas fa-file-excel"></i> Export Excel
+</a>
 
     </form>
 
 </div>
+<?php if (isset($_GET['success']) && $_GET['success'] == 'record_deleted'): ?>
+
+<div class="alert alert-success alert-dismissible fade show">
+    Record deleted successfully.
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<?php endif; ?>
+<?php if (isset($_GET['error']) && $_GET['error'] == 'record_not_found'): ?>
+
+<div class="alert alert-danger alert-dismissible fade show">
+    Record not found.
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<?php endif; ?>
+<?php if (isset($_GET['success']) && $_GET['success'] === 'record_deleted'): ?>
+
+<div class="alert alert-success alert-dismissible fade show">
+    Record deleted successfully.
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<?php endif; ?>
+<?php if (isset($_GET['error']) && $_GET['error'] === 'record_not_found'): ?>
+
+<div class="alert alert-danger alert-dismissible fade show">
+    Record not found.
+    <button class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<?php endif; ?>
     <table>
         <thead>
             <tr>
@@ -146,8 +205,8 @@ $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="action-buttons">
 
-<a href="details.php?id=<?= $row['id_key']; ?>" class="btn-view">
-<i class="fas fa-eye"></i> View
+<a href="view_record.php?id=<?= $row['id_key']; ?>" class="btn-view">
+    <i class="fas fa-eye"></i> View
 </a>
 
 <a href="edit.php?id=<?= $row['id_key']; ?>" class="btn-edit">
@@ -173,6 +232,68 @@ onclick="return confirm('Delete this record?');">
             <?php endif; ?>
         </tbody>
     </table>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+
+    <div>
+        Showing page <strong><?= $page ?></strong>
+        of <strong><?= $totalPages ?></strong>
+        (<?= $totalRecords ?> records)
+    </div>
+
+    <nav>
+
+        <ul class="pagination mb-0">
+
+            <?php if ($page > 1): ?>
+
+                <li class="page-item">
+
+                    <a class="page-link"
+                       href="?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>">
+
+                        Previous
+
+                    </a>
+
+                </li>
+
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+
+                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+
+                    <a class="page-link"
+                       href="?page=<?= $i ?>&search=<?= urlencode($search) ?>">
+
+                        <?= $i ?>
+
+                    </a>
+
+                </li>
+
+            <?php endfor; ?>
+
+            <?php if ($page < $totalPages): ?>
+
+                <li class="page-item">
+
+                    <a class="page-link"
+                       href="?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>">
+
+                        Next
+
+                    </a>
+
+                </li>
+
+            <?php endif; ?>
+
+        </ul>
+
+    </nav>
+
+</div>
 </div>
 </body>
 </html>
