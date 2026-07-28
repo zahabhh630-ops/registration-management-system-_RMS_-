@@ -3,6 +3,44 @@
 require_once "../includes/auth_check.php";
 require_once "../config/database.php";
 
+// ==============================
+// Registrations by Nationality
+// ==============================
+
+$stmt = $conn->query("
+    SELECT nationality, COUNT(*) AS total
+    FROM form_submissions
+    GROUP BY nationality
+    ORDER BY total DESC
+");
+
+$nationalityLabels = [];
+$nationalityTotals = [];
+
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $nationalityLabels[] = $row['nationality'];
+    $nationalityTotals[] = $row['total'];
+}
+
+// ==============================
+// Registrations by Occupation
+// ==============================
+
+$stmt = $conn->query("
+    SELECT occupation, COUNT(*) AS total
+    FROM form_submissions
+    WHERE occupation <> ''
+    GROUP BY occupation
+    ORDER BY total DESC
+");
+
+$occupationLabels = [];
+$occupationTotals = [];
+
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $occupationLabels[] = $row['occupation'];
+    $occupationTotals[] = $row['total'];
+}
 // ==========================
 // Dashboard Statistics
 // ==========================
@@ -401,6 +439,31 @@ Welcome back,
             Add User
 
         </a>
+        <div class="row mt-4">
+
+    <div class="col-md-6">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-dark text-white">
+
+                Registrations by Nationality
+
+            </div>
+
+            <div class="card-body">
+
+                <div style="max-width: 420px; margin: auto;">
+    <canvas id="nationalityChart"></canvas>
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
         <a href="../records/add.php" class="btn btn-primary m-2">
 
@@ -430,6 +493,129 @@ Welcome back,
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+const ctx = document.getElementById('nationalityChart');
+
+new Chart(ctx, {
+
+    type: 'pie',
+
+    data: {
+
+        labels: <?= json_encode($nationalityLabels) ?>,
+
+        datasets: [{
+
+            data: <?= json_encode($nationalityTotals) ?>
+
+        }]
+
+    },
+
+   options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+        legend: {
+            position: 'bottom'
+        },
+        title: {
+            display: true,
+            text: 'Registrations by Nationality'
+        }
+    }
+}
+
+});
+
+
+</script>
+<div class="col-md-6">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            Occupation Distribution
+
+        </div>
+
+        <div class="card-body">
+
+            <canvas id="occupationChart"></canvas>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+const occCtx = document.getElementById('occupationChart');
+
+new Chart(occCtx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: <?= json_encode($occupationLabels) ?>,
+
+        datasets: [{
+
+            label: 'Total',
+
+            data: <?= json_encode($occupationTotals) ?>,
+
+            backgroundColor: '#0B1F3A'
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+
+                display: false
+
+            }
+
+        },
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true,
+
+                ticks: {
+
+                    precision: 0
+
+                }
+
+            }
+
+        }
+
+    }
+
+});</script><div class="row">
+
+    <div class="col-md-6">
+        <!-- Pie Chart -->
+    </div>
+
+    <div class="col-md-6">
+        <!-- Bar Chart -->
+    </div>
+
+</div>
 </body>
 
 </html>
