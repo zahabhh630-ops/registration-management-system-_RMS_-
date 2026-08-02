@@ -1,16 +1,42 @@
+<?php
+
+$current = basename($_SERVER['PHP_SELF']);
+
+?>
 <div class="sidebar">
 
-    <h2>RMS</h2>
+    <div class="text-center py-4">
+
+<i class="fas fa-database fa-3x text-primary"></i>
+
+<h3 class="mt-2 mb-1">
+
+RMS
+
+</h3>
+
+<small class="text-muted">
+
+Registration Management System
+
+</small>
+<hr>
+</div>
 
     <ul>
 
         <li>
-            <a href="../dashboard/index.php">
-                <i class="fas fa-chart-line"></i>
-                Dashboard
-            </a>
-        </li>
 
+<a href="../dashboard/index.php"
+
+class="<?= $current=='index.php'
+?'active':'' ?>">
+
+Dashboard
+
+</a>
+
+</li>
         <li>
             <a href="../records/view.php">
                 <i class="fas fa-users"></i>
@@ -48,15 +74,31 @@
 
 <?php endif; ?>
         <li>
-            <a href="#">
-                <i class="fas fa-cog"></i>
-                Settings
-            </a>
-        </li>
 
+<a href="../settings/index.php">
+
+<i class="fas fa-cogs"></i>
+
+Settings
+
+</a>
+
+</li>
+<li>
+    <a href="../backup/index.php">
+        <i class="fas fa-database"></i>
+        Backup Database
+    </a>
+</li>
+<li>
+    <a href="../profile/index.php">
+        <i class="fas fa-user-circle"></i>
+        My Profile
+    </a>
+</li>
         <li>
             <a href="../auth/logout.php">
-                <i class="fas fa-sign-out-alt"></i>
+                <i   class="fas fa-sign-out-alt"></i>
                 Logout
             </a>
         </li>

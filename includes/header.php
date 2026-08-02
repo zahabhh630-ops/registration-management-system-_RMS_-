@@ -1,4 +1,7 @@
 <?php
+require_once "../config/database.php";
+require_once "../includes/settings.php";
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,7 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Registration Management System</title>
+    <title><?= htmlspecialchars($app['system_name']) ?></title>
 
     <link rel="stylesheet" href="../assets/css/style.css">
 

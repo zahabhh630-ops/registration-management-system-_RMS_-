@@ -480,3 +480,24 @@ Dashboard Header
     background:#146c43;
 
 }
+.card{
+    transition: .3s;
+}
+
+.card:hover{
+    transform: translateY(-6px);
+    box-shadow:0 15px 30px rgba(0,0,0,.15);
+}
+.card{
+
+transition:.25s;
+
+}
+
+.card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 15px 30px rgba(0,0,0,.18);
+
+}
